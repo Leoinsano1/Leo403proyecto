@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal Web Interactivo</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Página Principal -->
+        <div id="main-page" class="page active">
+            <div class="header">
+                <h1>Portal Web Interactivo</h1>
+                <p>Selecciona una sección para explorar</p>
+            </div>
+            
+            <div class="buttons-grid">
+                <button class="nav-button games-btn" onclick="showPage('games')">
+                    <div class="button-icon">🎮</div>
+                    <h3>Juegos</h3>
+                    <p>Ahorcado, Preguntas y Memorama</p>
+                </button>
+                
+                <button class="nav-button chatbot-btn" onclick="showPage('chatbot')">
+                    <div class="button-icon">🤖</div>
+                    <h3>ChatBot</h3>
+                    <p>Asistente virtual inteligente</p>
+                </button>
+                
+                <button class="nav-button realmadrid-btn" onclick="showPage('realmadrid')">
+                    <div class="button-icon">⚽</div>
+                    <h3>Real Madrid</h3>
+                    <p>Historia y información del club</p>
+                </button>
+                
+                <button class="nav-button project-btn" onclick="showPage('project')">
+                    <div class="button-icon">📋</div>
+                    <h3>Proyecto</h3>
+                    <p>Enlaces y proyectos externos</p>
+                </button>
+            </div>
+        </div>
+
+        <!-- Página de Juegos -->
+        <div id="games-page" class="page">
+            <div class="page-header">
+                <button class="back-btn" onclick="showPage('main')">← Volver</button>
+                <h2>🎮 Centro de Juegos</h2>
+            </div>
+            
+            <div id="games-menu" class="games-container">
+                <div class="games-grid">
+                    <button class="game-card" onclick="showGame('hangman')">
+                        <div class="game-icon">🎯</div>
+                        <h3>Ahorcado</h3>
+                        <p>Adivina la palabra oculta</p>
+                    </button>
+                    
+                    <button class="game-card" onclick="showGame('quiz')">
+                        <div class="game-icon">🧠</div>
+                        <h3>Preguntas</h3>
+                        <p>Cultura general</p>
+                    </button>
+                    
+                    <button class="game-card" onclick="showGame('memory')">
+                        <div class="game-icon">🔄</div>
+                        <h3>Memorama</h3>
+                        <p>Encuentra las parejas</p>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Juego Ahorcado -->
+            <div id="hangman-game" class="game-content" style="display: none;">
+                <div class="game-header">
+                    <button class="back-btn" onclick="showGamesMenu()">← Volver a Juegos</button>
+                    <h3>🎯 Ahorcado</h3>
+                </div>
+                <div class="hangman-container">
+                    <div class="hangman-display">
+                        <div id="hangman-emoji">😊</div>
+                        <div id="word-display"></div>
+                        <div id="attempts-left">Intentos restantes: 6</div>
+                    </div>
+                    <div id="alphabet-buttons" class="alphabet-grid"></div>
+                    <button id="new-word-btn" onclick="newHangmanGame()" style="display: none;">Nueva Palabra</button>
+                </div>
+            </div>
+
+            <!-- Juego Quiz -->
+            <div id="quiz-game" class="game-content" style="display: none;">
+                <div class="game-header">
+                    <button class="back-btn" onclick="showGamesMenu()">← Volver a Juegos</button>
+                    <h3>🧠 Quiz de Cultura General</h3>
+                </div>
+                <div class="quiz-container">
+                    <div class="quiz-progress">
+                        <div id="progress-bar"></div>
+                        <span id="question-counter">Pregunta 1 de 5</span>
+                        <span id="score-display">Puntuación: 0</span>
+                    </div>
+                    <div id="question-container">
+                        <h4 id="question-text"></h4>
+                        <div id="options-container"></div>
+                    </div>
+                    <button id="next-question-btn" onclick="nextQuestion()" style="display: none;">Siguiente</button>
+                    <button id="restart-quiz-btn" onclick="restartQuiz()" style="display: none;">Reiniciar Quiz</button>
+                </div>
+            </div>
+
+            <!-- Juego Memorama -->
+            <div id="memory-game" class="game-content" style="display: none;">
+                <div class="game-header">
+                    <button class="back-btn" onclick="showGamesMenu()">← Volver a Juegos</button>
+                    <h3>🔄 Memorama</h3>
+                </div>
+                <div class="memory-container">
+                    <div class="memory-stats">
+                        <span id="moves-counter">Movimientos: 0</span>
+                        <button onclick="resetMemoryGame()">Reiniciar</button>
+                    </div>
+                    <div id="memory-board" class="memory-board"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Página ChatBot -->
+        <div id="chatbot-page" class="page">
+            <div class="page-header">
+                <button class="back-btn" onclick="showPage('main')">← Volver</button>
+                <h2>🤖 ChatBot Inteligente</h2>
+                <div class="status-indicator">
+                    <div class="status-dot"></div>
+                    <span>En línea</span>
+                </div>
+            </div>
+            
+            <div class="chat-container">
+                <div id="chat-messages" class="chat-messages"></div>
+                <div class="chat-input-container">
+                    <input type="text" id="chat-input" placeholder="Escribe tu mensaje aquí..." onkeypress="handleChatKeyPress(event)">
+                    <button onclick="sendMessage()">Enviar</button>
+                </div>
+                <div class="chat-suggestions">
+                    💡 Prueba preguntarme sobre: ayuda, programación, Real Madrid, o simplemente salúdame
+                </div>
+            </div>
+        </div>
+
+        <!-- Página Real Madrid -->
+        <div id="realmadrid-page" class="page">
+            <div class="page-header">
+                <button class="back-btn" onclick="showPage('main')">← Volver</button>
+                <h2>⚪ Real Madrid CF</h2>
+                <p>El Club Más Grande del Mundo</p>
+            </div>
+            
+            <div class="realmadrid-container">
+                <div class="tabs-container">
+                    <button class="tab-btn active" onclick="showTab('historia')">📚 Historia</button>
+                    <button class="tab-btn" onclick="showTab('jugadores')">⚽ Jugadores</button>
+                    <button class="tab-btn" onclick="showTab('estadio')">🏟️ Estadio</button>
+                    <button class="tab-btn" onclick="showTab('titulos')">🏆 Títulos</button>
+                </div>
+
+                <div id="historia-tab" class="tab-content active">
+                    <h3>Historia del Real Madrid</h3>
+                    <div class="info-cards">
+                        <div class="info-card">
+                            <h4>Fundación (1902)</h4>
+                            <p>El Real Madrid Club de Fútbol fue fundado el 6 de marzo de 1902 como Madrid Football Club. En 1920, el rey Alfonso XIII otorgó el título "Real" al club.</p>
+                        </div>
+                        <div class="info-card">
+                            <h4>Era Dorada (1950s-1960s)</h4>
+                            <p>Los años 50 y 60 marcaron la época más gloriosa del club, ganando las primeras cinco Copas de Europa consecutivas (1956-1960).</p>
+                        </div>
+                        <div class="info-card">
+                            <h4>Los Galácticos</h4>
+                            <p>A principios de los 2000, el presidente Florentino Pérez implementó la política de los "Galácticos", fichando a las mayores estrellas mundiales.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="jugadores-tab" class="tab-content">
+                    <h3>Jugadores Legendarios</h3>
+                    <div class="players-grid">
+                        <div class="player-card">
+                            <h4>Cristiano Ronaldo</h4>
+                            <p><strong>Delantero (2009-2018)</strong></p>
+                            <p>451 goles en 438 partidos. 4 Balones de Oro y 4 Champions League con el Real Madrid.</p>
+                        </div>
+                        <div class="player-card">
+                            <h4>Alfredo Di Stéfano</h4>
+                            <p><strong>Delantero (1953-1964)</strong></p>
+                            <p>308 goles en 396 partidos. Líder de las cinco primeras Champions League del club.</p>
+                        </div>
+                        <div class="player-card">
+                            <h4>Sergio Ramos</h4>
+                            <p><strong>Defensor (2005-2021)</strong></p>
+                            <p>101 goles en 671 partidos. Capitán durante 16 temporadas, ganó 22 títulos.</p>
+                        </div>
+                        <div class="player-card">
+                            <h4>Karim Benzema</h4>
+                            <p><strong>Delantero (2009-2023)</strong></p>
+                            <p>354 goles en 648 partidos. Balón de Oro 2022, 5 Champions League.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="estadio-tab" class="tab-content">
+                    <h3>Santiago Bernabéu</h3>
+                    <div class="stadium-info">
+                        <div class="info-card">
+                            <h4>Información General</h4>
+                            <ul>
+                                <li><strong>Capacidad:</strong> 81,044 espectadores</li>
+                                <li><strong>Inaugurado:</strong> 14 de diciembre de 1947</li>
+                                <li><strong>Ubicación:</strong> Madrid, España</li>
+                                <li><strong>Renovación:</strong> 2019-2023 (€800 millones)</li>
+                            </ul>
+                        </div>
+                        <div class="info-card">
+                            <h4>Características Especiales</h4>
+                            <ul>
+                                <li>• Techo retráctil completamente funcional</li>
+                                <li>• Campo de césped retráctil</li>
+                                <li>• Sistema de videowall de 360 grados</li>
+                                <li>• Museo del Real Madrid integrado</li>
+                                <li>• Hotel de 5 estrellas</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="titulos-tab" class="tab-content">
+                    <h3>Palmarés del Real Madrid</h3>
+                    <div class="titles-grid">
+                        <div class="titles-card">
+                            <h4>🏆 Competiciones Internacionales</h4>
+                            <ul>
+                                <li><strong>Champions League:</strong> 15 títulos</li>
+                                <li><strong>Copa UEFA/Europa League:</strong> 2 títulos</li>
+                                <li><strong>Supercopa de Europa:</strong> 5 títulos</li>
+                                <li><strong>Mundial de Clubes:</strong> 8 títulos</li>
+                            </ul>
+                        </div>
+                        <div class="titles-card">
+                            <h4>🏆 Competiciones Nacionales</h4>
+                            <ul>
+                                <li><strong>La Liga:</strong> 36 títulos</li>
+                                <li><strong>Copa del Rey:</strong> 20 títulos</li>
+                                <li><strong>Supercopa de España:</strong> 13 títulos</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Página Proyecto -->
+        <div id="project-page" class="page">
+            <div class="page-header">
+                <button class="back-btn" onclick="showPage('main')">← Volver</button>
+                <h2>📋 Proyectos Externos</h2>
+            </div>
+            
+            <div class="project-container">
+                <div class="project-info">
+                    <div class="project-icon">🔗</div>
+                    <h3>Configuración de Enlaces Externos</h3>
+                    <p>Aquí puedes configurar enlaces a tus proyectos externos o páginas web</p>
+                </div>
+
+                <div class="project-config">
+                    <div class="config-card">
+                        <h4>🎯 Enlace Personalizable</h4>
+                        <p>Modifica la URL en el campo de abajo para vincular a tu proyecto externo:</p>
+                        <div class="url-input-container">
+                            <label>URL del Proyecto:</label>
+                            <input type="url" id="project-url" value="https://ejemplo.com" placeholder="https://tu-proyecto.com">
+                            <button onclick="openExternalProject()">🚀 Abrir Proyecto Externo</button>
+                        </div>
+                    </div>
+
+                    <div class="config-card">
+                        <h4>💡 Instrucciones para Desarrolladores</h4>
+                        <p><strong>Para vincular tu propio proyecto:</strong></p>
+                        <ol>
+                            <li>Modifica la variable en el archivo <code>script.js</code></li>
+                            <li>Cambia el valor por defecto a la URL de tu proyecto</li>
+                            <li>Si necesitas múltiples enlaces, duplica la estructura del botón</li>
+                            <li>Personaliza los íconos y descripciones según tus necesidades</li>
+                        </ol>
+                    </div>
+
+                    <div class="config-card warning">
+                        <div class="warning-header">
+                            <span class="warning-icon">⚠️</span>
+                            <h5>Nota Importante</h5>
+                        </div>
+                        <p>Esta sección está diseñada para que puedas vincular fácilmente tus proyectos externos. Modifica el código fuente en <code>script.js</code> para personalizar completamente esta funcionalidad según tus necesidades.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
